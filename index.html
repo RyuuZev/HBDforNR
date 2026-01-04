@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun Hana!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9c5d1, #c2e9fb);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #ff7bac;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed #ff7bac;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #ff4d8d;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .birthday-icon {
+            font-size: 2.5rem;
+            color: #ff7bac;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .friend-name {
+            color: #ff4d8d;
+            font-weight: 700;
+            background-color: #fff0f5;
+            padding: 5px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .music-control {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            background-color: #ff7bac;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-btn:hover {
+            background-color: #ff4d8d;
+            transform: scale(1.05);
+        }
+
+        .message-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .style-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .style-btn.active {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .style-btn.lucu {
+            background-color: #FFD166;
+            color: #333;
+        }
+
+        .style-btn.romantis {
+            background-color: #FF7BAC;
+            color: white;
+        }
+
+        .style-btn.formal {
+            background-color: #4A90E2;
+            color: white;
+        }
+
+        .style-btn:hover:not(.active) {
+            transform: translateY(-3px);
+        }
+
+        .message-box {
+            background-color: #fff9fb;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 3px solid #ffc2d6;
+            min-height: 200px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .message-box p {
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .surprise-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .surprise-btn {
+            background: linear-gradient(45deg, #FF7BAC, #FFD166);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 125, 172, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .surprise-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 25px rgba(255, 125, 172, 0.4);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #ff7bac, #ffd166);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            color: white;
+            animation: popupAppear 0.5s ease-out;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes popupAppear {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .popup h2 {
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+
+        .popup p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .close-popup {
+            background-color: white;
+            color: #ff7bac;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-popup:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cake {
+            position: relative;
+            width: 150px;
+            height: 60px;
+            margin: 30px auto;
+        }
+
+        .cake-base {
+            position: absolute;
+            width: 150px;
+            height: 40px;
+            background: #FFD166;
+            border-radius: 10px;
+            bottom: 0;
+        }
+
+        .cake-top {
+            position: absolute;
+            width: 120px;
+            height: 30px;
+            background: #ff7bac;
+            border-radius: 50% 50% 0 0;
+            bottom: 40px;
+            left: 15px;
+        }
+
+        .candle {
+            position: absolute;
+            width: 6px;
+            height: 25px;
+            background: #4A90E2;
+            border-radius: 3px;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .flame {
+            position: absolute;
+            width: 12px;
+            height: 20px;
+            background: #FFD166;
+            border-radius: 50% 50% 20% 20%;
+            bottom: 95px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 0.8s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .message-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .style-btn {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Selamat Ulang Tahun!</h1>
+            <div class="birthday-icon">
+                <i class="fas fa-birthday-cake"></i>
+            </div>
+            <h2>Untuk <span class="friend-name" id="friendName">Hana</span></h2>
+            
+            <div class="cake">
+                <div class="cake-base"></div>
+                <div class="cake-top"></div>
+                <div class="candle"></div>
+                <div class="flame"></div>
+            </div>
+            
+            <div class="music-control">
+                <button id="musicToggle" class="music-btn">
+                    <i class="fas fa-volume-up"></i> <span id="musicText">Matikan Musik</span>
+                </button>
+            </div>
+            
+            <p>Pilih gaya ucapan,<span class="friend-name" id="friendName2">Hana</span>:</p>
+        </div>
+        
+        <div class="message-selector">
+            <button class="style-btn lucu active" data-style="lucu">Lucu & Santai</button>
+            <button class="style-btn romantis" data-style="romantis">?</button>
+            <button class="style-btn formal" data-style="formal">Formal & Sopan</button>
+        </div>
+        
+        <div class="message-box" id="messageBox">
+            <!-- Konten pesan akan diisi oleh JavaScript -->
+        </div>
+        
+        <div class="surprise-section">
+            <button class="surprise-btn" id="surpriseBtn">
+                <i class="fas fa-gift"></i> Klik untuk Kejutan!
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>5 Januari 2007/2026</p>
+            <p>© 2026!</p>
+        </div>
+    </div>
+    
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h2>Kejutan!</h2>
+            <p>Hana, semoga di ulang tahunmu ini semua harapan dan mimpimu menjadi kenyataan! 🎉🎂🎈</p>
+            <p>Teruslah bersinar seperti bintang dan beri warna pada dunia sekitarmu!</p>
+            <button class="close-popup" id="closePopup">Tutup</button>
+        </div>
+    </div>
+    
+    <audio id="birthdayMusic" loop>
+        <!-- Musik ulang tahun "Happy Birthday" dalam versi instrumental -->
+        <source src="Music/id5jan2026.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // Inisialisasi variabel dan elemen
+        const friendName = "Hana";
+        const musicToggle = document.getElementById('musicToggle');
+        const musicText = document.getElementById('musicText');
+        const birthdayMusic = document.getElementById('birthdayMusic');
+        let lastVolume = 0.2;
+
+function toggleMute() {
+    if (birthdayMusic.volume > 0) {
+        lastVolume = birthdayMusic.volume;
+        birthdayMusic.volume = 0;
+    } else {
+        birthdayMusic.volume = lastVolume;
+    }
+}
+
+        const messageBox = document.getElementById('messageBox');
+        const styleButtons = document.querySelectorAll('.style-btn');
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        const popup = document.getElementById('popup');
+        const closePopup = document.getElementById('closePopup');
+        
+        // Data pesan untuk setiap gaya
+        const messages = {
+            lucu: {
+                title: "Selamat Ulang Tahun yang Lucu!",
+                content: `
+                    <p>Hai Hana! Selamat ulang tahun ya! 🎉</p>
+                    <p>Umurmu sekarang sudah bertambah, tapi jangan khawatir, kamu masih muda kok! Yang penting hati tetap muda dan semangat selalu menyala!</p>
+                    <p>Semoga di umur yang baru ini kamu makin bahagia setiap hari, rezekimu selalu lancar, senyummu makin sering keluar tanpa perlu filter, dan setiap langkahmu dipenuhi kejutan yang menyenangkan! 😄✨ </p>
+                    <p>Pokoknya, semoga panjang umur, sehat selalu, dan rezekinya lancar seperti air mengalir!</p>
+                `,
+                signature: "Dari player hoyo"
+            },
+            romantis: {
+                title: "Selamat Ulang Tahun Sweetie.",
+                content: `
+                    <p>Untuk Hana yang manis,</p>
+                    <p>Di hari spesialmu ini, kuucapkan selamat ulang tahun. Semoga setiap langkahmu diiringi kebahagiaan, setiap detik hidupmu dipenuhi cinta, dan setiap harapanmu terkabulkan.</p>
+                    <p>Kamu adalah cahaya yang menerangi hari-hari orang di sekitarmu. Senyummu bagai mentari pagi yang menghangatkan.</p>
+                    <p>Semoga tahun ini membawa lebih banyak kebahagiaan, kesuksesan, dan petualangan indah untukmu. Teruslah menjadi pribadi yang cantik luar dalam seperti sekarang ini.</p>
+                    <p>Aku bersyukur bisa mengenalmu. Selamat merayakan hari kelahiranmu yang penuh berkah.</p>
+                `,
+                signature: "From someone"
+            },
+            formal: {
+                title: "Selamat Ulang Tahun yang Berbahagia",
+                content: `
+                    <p>Kepada Yth. Sdr. Hana,</p>
+                    <p>Dalam rangka menyambut hari ulang tahun Anda yang ke-19, saya mengucapkan selamat ulang tahun. Semoga di usia yang bertambah ini, Anda senantiasa diberi kesehatan, keberkahan, dan kesuksesan dalam segala aspek kehidupan.</p>
+                    <p>Teruslah menjadi pribadi yang inspiratif dan memberikan dampak positif bagi lingkungan sekitar. Saya berharap Anda dapat merayakan hari spesial ini dengan penuh sukacita bersama orang-orang terkasih.</p>
+                    <p>Semoga Tuhan Yang Maha Esa senantiasa melimpahkan rahmat dan karunia-Nya kepada Anda.</p>
+                `,
+                signature: "Hormat aku,<br>M. K. Pasya"
+            }
+        };
+        
+        // Fungsi untuk memulai confetti
+        function startConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff7bac', '#4A90E2', '#FFD166', '#06D6A0']
+            });
+            
+            // Tambah efek confetti tambahan setelah delay
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    angle: 60,
+                    spread: 80,
+                    origin: { x: 0 },
+                    colors: ['#ff7bac', '#4A90E2', '#FFD166']
+                });
+            }, 250);
+            
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    angle: 120,
+                    spread: 80,
+                    origin: { x: 1 },
+                    colors: ['#ff7bac', '#4A90E2', '#FFD166']
+                });
+            }, 500);
+        }
+
+        function fadeInAudio() {
+    birthdayMusic.volume = 0;
+    birthdayMusic.play();
+    let v = 0;
+    const fade = setInterval(() => {
+        if (v < 0.2) {
+            v += 0.01;
+            birthdayMusic.volume = v;
+        } else {
+            clearInterval(fade);
+        }
+    }, 100);
+}
+
+        
+        // Fungsi untuk mengubah pesan berdasarkan gaya
+        function changeMessageStyle(style) {
+            // Update tombol aktif
+            styleButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.style === style) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update konten pesan
+            const message = messages[style];
+            messageBox.innerHTML = `
+                <h3 style="color: ${style === 'lucu' ? '#FFD166' : style === 'romantis' ? '#FF7BAC' : '#4A90E2'}; margin-bottom: 15px;">${message.title}</h3>
+                ${message.content}
+                <div class="signature">${message.signature}</div>
+            `;
+            
+            // Jika gaya formal, tambahkan usia acak
+            if (style === 'formal') {
+                const age = Math.floor(Math.random() * 10) + 25; // Usia antara 25-34
+                document.getElementById('age').textContent = age;
+            }
+            
+            // Trigger confetti kecil saat ganti pesan
+            if (style === 'romantis' || style === 'lucu') {
+                confetti({
+                    particleCount: 30,
+                    spread: 60,
+                    origin: { y: 0.8 },
+                    colors: style === 'romantis' ? ['#ff7bac', '#FFD166'] : ['#FFD166', '#4A90E2']
+                });
+            }
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            fadeInAudio();
+            // Mulai musik secara otomatis
+            birthdayMusic.volume = 0.2;
+            birthdayMusic.play().catch(e => {
+                console.log("Autoplay diblokir oleh browser. Musik akan dimulai setelah interaksi pengguna.");
+                musicText.textContent = "Putar Musik";
+            });
+            
+            // Tampilkan pesan default (lucu)
+            changeMessageStyle('lucu');
+            
+            // Trigger confetti pertama saat halaman dimuat
+            setTimeout(startConfetti, 1000);
+            
+            // Update semua elemen dengan nama teman
+            document.querySelectorAll('.friend-name').forEach(el => {
+                el.textContent = friendName;
+            });
+        });
+        
+        // Tombol kontrol musik
+        musicToggle.addEventListener('click', function() {
+            if (birthdayMusic.paused) {
+                birthdayMusic.play();
+                musicText.textContent = "Matikan Musik";
+                this.innerHTML = '<i class="fas fa-volume-up"></i> Matikan Musik';
+            } else {
+                birthdayMusic.pause();
+                musicText.textContent = "Putar Musik";
+                this.innerHTML = '<i class="fas fa-volume-mute"></i> Putar Musik';
+            }
+        });
+        
+        // Tombol pilih gaya pesan
+        styleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const style = this.dataset.style;
+                changeMessageStyle(style);
+            });
+        });
+        
+        // Tombol kejutan
+        surpriseBtn.addEventListener('click', function() {
+            // Tampilkan popup
+            popup.style.display = 'flex';
+            
+            // Confetti besar
+            startConfetti();
+            
+            // Confetti tambahan setiap 0.8 detik selama 3 detik
+            const confettiInterval = setInterval(startConfetti, 800);
+            setTimeout(() => clearInterval(confettiInterval), 3000);
+            
+            // Animasi tombol
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+        
+        // Tutup popup
+        closePopup.addEventListener('click', function() {
+            popup.style.display = 'none';
+        });
+        
+        // Tutup popup jika klik di luar konten
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
