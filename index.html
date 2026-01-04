@@ -404,14 +404,7 @@
         const birthdayMusic = document.getElementById('birthdayMusic');
         let lastVolume = 0.2;
 
-function toggleMute() {
-    if (birthdayMusic.volume > 0) {
-        lastVolume = birthdayMusic.volume;
-        birthdayMusic.volume = 0;
-    } else {
-        birthdayMusic.volume = lastVolume;
-    }
-}
+
 
         const messageBox = document.getElementById('messageBox');
         const styleButtons = document.querySelectorAll('.style-btn');
@@ -518,11 +511,7 @@ function toggleMute() {
                 <div class="signature">${message.signature}</div>
             `;
             
-            // Jika gaya formal, tambahkan usia acak
-            if (style === 'formal') {
-                const age = Math.floor(Math.random() * 10) + 25; // Usia antara 25-34
-                document.getElementById('age').textContent = age;
-            }
+            
             
             // Trigger confetti kecil saat ganti pesan
             if (style === 'romantis' || style === 'lucu') {
@@ -536,8 +525,9 @@ function toggleMute() {
         }
         
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('click', function initAudio() {
             fadeInAudio();
+            document.removeEventListener('click', initAudio);
             // Mulai musik secara otomatis
             
             
@@ -557,11 +547,9 @@ function toggleMute() {
         musicToggle.addEventListener('click', function() {
             if (birthdayMusic.paused) {
                 birthdayMusic.play();
-                musicText.textContent = "Matikan Musik";
                 this.innerHTML = '<i class="fas fa-volume-up"></i> Matikan Musik';
             } else {
                 birthdayMusic.pause();
-                musicText.textContent = "Putar Musik";
                 this.innerHTML = '<i class="fas fa-volume-mute"></i> Putar Musik';
             }
         });
